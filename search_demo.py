@@ -6,6 +6,14 @@ app = Flask(__name__)
 @app.get("/search")
 def search():
     query = request.args.get("q", "")
-    command = "grep -R " + query + " ."
-    subprocess.run(command, shell=True, check=False)
+
+    subprocess.run(
+        ["grep", "-R", "--", query, "."],
+        shell=False,
+        check=False,
+        timeout=5,
+        capture_output=True,
+        text=True,
+    )
+
     return "Search completed"
