@@ -1,7 +1,11 @@
+from flask import Flask, request
 import subprocess
 
+app = Flask(__name__)
 
-def search_files(user_query):
-    # Intentionally vulnerable: do not use in production.
-    command = "grep -R " + user_query + " ."
+@app.get("/search")
+def search():
+    query = request.args.get("q", "")
+    command = "grep -R " + query + " ."
     subprocess.run(command, shell=True, check=False)
+    return "Search completed"
